@@ -1,4 +1,4 @@
-# ActiveSlide
+# ReSlide
 
 Upload lecture slides (PDF or image) and get a varied version that fights the "illusion of competence": explanations are paraphrased, blocks are rearranged, and fill-in-the-blank questions are added. Core terminology, formulas and diagrams are never altered. The result is rendered back to a downloadable PDF.
 
