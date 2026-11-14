@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: 13.333in 7.5in; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "DejaVu Sans", "Helvetica", sans-serif; color: #1f2933; }
+  .page { width: 13.333in; height: 7.5in; background: #dde4ee; padding: 0.45in; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .card { width: 100%; height: 100%; background: #f7efdf; border: 4px solid #8a97a8; border-radius: 14px;
+          padding: 0.4in 0.5in; display: flex; flex-direction: column; }
+  h1 { font-size: 34pt; font-weight: 400; line-height: 1.1; margin-bottom: 0.2in; }
+  .body { flex: 1; display: flex; min-height: 0; gap: 0.35in; }
+  .body.text_left { flex-direction: row; }
+  .body.text_right { flex-direction: row-reverse; }
+  .body.stacked { flex-direction: column; }
+  .text { flex: 0 0 38%; }
+  .stacked .text { flex: 0 0 auto; }
+  .text p { margin-bottom: 0.14in; line-height: 1.35; }
+  .text-lg p { font-size: 22pt; } .text-md p { font-size: 17pt; } .text-sm p { font-size: 13pt; }
+  .visuals { flex: 1; display: flex; flex-direction: column; gap: 0.25in; min-height: 0; min-width: 0; }
+  .stacked .visuals { flex-direction: row; }
+  .visuals .v { flex: 1 1 0; position: relative; min-width: 0; min-height: 0; }
+  .visuals img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+  .full { flex: 1; position: relative; min-height: 0; }
+  .full img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+  .footer { font-size: 8pt; color: #7b8794; text-align: right; margin-top: 0.1in; }
+  .q { margin-bottom: 0.3in; }
+  .q .sentence { font-size: 17pt; line-height: 1.4; margin-bottom: 0.12in; }
+  .blank { display: inline-block; min-width: 1.6in; border-bottom: 3px solid #c0392b; margin: 0 0.05in; }
+  .chip { display: inline-block; background: #fff; border: 2px solid #b7c0cc; border-radius: 10px;
+          padding: 0.07in 0.18in; margin-right: 0.15in; font-size: 14pt; }
+  .key { font-size: 15pt; margin-bottom: 0.1in; }
+</style>
+</head>
+<body>
+{% for s in slides %}
+<div class="page"><div class="card">
+  <h1>{{ s.title }}</h1>
+  {% if s.full_page %}
+    <div class="full"><img src="{{ s.full_page }}"></div>
+  {% else %}
+    <div class="body {{ s.layout }}">
+      {% if s.paragraphs %}<div class="text {{ s.size_class }}">{% for p in s.paragraphs %}<p>{{ p }}</p>{% endfor %}</div>{% endif %}
+      {% if s.visuals %}<div class="visuals">{% for v in s.visuals %}<div class="v"><img src="{{ v.src }}" alt="{{ v.label }}"></div>{% endfor %}</div>{% endif %}
+    </div>
+  {% endif %}
+  <div class="footer">ActiveSlide &middot; slide {{ s.number }}</div>
+</div></div>
+{% if s.questions %}
+<div class="page"><div class="card">
+  <h1>Check yourself &middot; slide {{ s.number }}</h1>
+  <div class="body" style="flex-direction: column;">
+    {% for q in s.questions %}
+    <div class="q">
+      <div class="sentence">{{ loop.index }}. {{ q.before }}<span class="blank"></span>{{ q.after }}</div>
+      {% for letter, option in q.options %}<span class="chip"><b>{{ letter }}</b> &nbsp;{{ option }}</span>{% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+  <div class="footer">ActiveSlide &middot; answers on the last page</div>
+</div></div>
+{% endif %}
+{% endfor %}
+{% if slides|selectattr("questions")|list %}
+<div class="page"><div class="card">
+  <h1>Answer key</h1>
+  <div class="body" style="flex-direction: column;">
+  {% for s in slides if s.questions %}
+    <div class="key"><b>Slide {{ s.number }}:</b>
+    {% for q in s.questions %}{{ loop.index }}-{{ q.answer }} ({{ q.answer_text }}){% if not loop.last %}, {% endif %}{% endfor %}</div>
+  {% endfor %}
+  </div>
+</div></div>
+{% endif %}
+</body>
+</html>

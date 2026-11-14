@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slide Before / After Comparison</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      padding: 32px 16px;
+    }
+
+    .page-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .slide-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .slide-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #0f172a;
+    }
+
+    /* 16:9 container matching standard presentation slides */
+    .compare-container {
+      --pos: 50%;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      user-select: none;
+    }
+
+    .compare-container img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    /* Top layer (Before) gets clipped smoothly without stretching */
+    .img-before {
+      z-index: 2;
+      clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+    }
+
+    .img-after {
+      z-index: 1;
+    }
+
+    /* Corner badges */
+    .badge {
+      position: absolute;
+      top: 12px;
+      z-index: 3;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.75);
+      color: #ffffff;
+      pointer-events: none;
+    }
+
+    .badge-before { left: 12px; }
+    .badge-after  { right: 12px; }
+
+    /* Vertical divider line & draggable circle */
+    .slider-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--pos);
+      width: 3px;
+      background: #ffffff;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.45);
+      transform: translateX(-50%);
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .slider-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Full-area invisible range input for mouse, touch, and keyboard drag */
+    .slider-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: ew-resize;
+      z-index: 5;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <!-- ========================================================= -->
+    <!-- SLIDE PAIR 1: Replace slide1_before.png & slide1_after.png -->
+    <!-- ========================================================= -->
+    <div class="slide-card">
+      <div class="slide-title">Slide 1: Gaussian Prior on the Weights</div>
+      <div class="compare-container">
+        <img class="img-after"  src="slide1_after.jpeg"  alt="Slide 1 After" />
+        <img class="img-before" src="slide1_before.png" alt="Slide 1 Before" />
+        <span class="badge badge-before">Before</span>
+        <span class="badge badge-after">After</span>
+        <div class="slider-line"><div class="slider-handle">↔</div></div>
+        <input class="slider-input" type="range" min="0" max="100" value="50" aria-label="Compare Slide 1" />
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SLIDE PAIR 2: Replace slide2_before.png & slide2_after.png -->
+    <!-- ========================================================= -->
+    <div class="slide-card">
+      <div class="slide-title">Slide 2: Train / Val / Test Split</div>
+      <div class="compare-container">
+        <img class="img-after"  src="slide2_after.jpeg"  alt="Slide 2 After" />
+        <img class="img-before" src="slide2_before.png" alt="Slide 2 Before" />
+        <span class="badge badge-before">Before</span>
+        <span class="badge badge-after">After</span>
+        <div class="slider-line"><div class="slider-handle">↔</div></div>
+        <input class="slider-input" type="range" min="0" max="100" value="50" aria-label="Compare Slide 2" />
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SLIDE PAIR 3: Replace slide3_before.png & slide3_after.png -->
+    <!-- ========================================================= -->
+    <div class="slide-card">
+      <div class="slide-title">Slide 3: Evaluation Metrics</div>
+      <div class="compare-container">
+        <img class="img-after"  src="slide3_after.jpeg"  alt="Slide 3 After" />
+        <img class="img-before" src="slide3_before.png" alt="Slide 3 Before" />
+        <span class="badge badge-before">Before</span>
+        <span class="badge badge-after">After</span>
+        <div class="slider-line"><div class="slider-handle">↔</div></div>
+        <input class="slider-input" type="range" min="0" max="100" value="50" aria-label="Compare Slide 3" />
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    document.querySelectorAll(".compare-container").forEach((container) => {
+      const slider = container.querySelector(".slider-input");
+      slider.addEventListener("input", (e) => {
+        container.style.setProperty("--pos", `${e.target.value}%`);
+      });
+    });
+  </script>
+
+</body>
+</html>
